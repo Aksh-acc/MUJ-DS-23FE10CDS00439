@@ -1,0 +1,111 @@
+# Branched RAG for Market and Competitive Intelligence
+# Every numeric choice here is justified in docs/design-decisions.md.
+
+paths:
+  corpus: data/processed/corpus.parquet
+  chunks: data/processed/chunks.parquet
+  artifacts: artifacts
+  eval_queries: data/eval/queries.jsonl
+
+embedding:
+  model: sentence-transformers/all-MiniLM-L6-v2
+  batch_size: 128
+  normalize: true          # cosine similarity via inner product on unit vectors
+
+reranker:
+  enabled: true
+  model: cross-encoder/ms-marco-MiniLM-L-6-v2
+  candidates: 24           # rerank depth per branch; keeps cross-encoder cost bounded
+
+router:
+  strategy: hybrid         # embedding | lexical | hybrid | llm
+  embedding_weight: 0.65   # descriptor similarity contributes most of the score
+  lexical_weight: 0.35
+  relative_threshold: 0.55 # keep branches scoring within this fraction of the best
+  min_score: 0.08          # absolute floor for a plainly irrelevant branch
+  max_branches: 3
+  always_keep_top: true    # never return an empty branch set
+
+retrieval:
+  fusion: rrf
+  rrf_k: 60                # standard RRF damping constant
+  dense_candidates: 40
+  sparse_candidates: 40
+
+generation:
+  max_evidence_chars: 1100 # per chunk, truncated before prompting
+  temperature: 0.2
+  max_tokens: 700
+
+llm:
+  provider: auto           # auto | groq | ollama | local_hf
+  groq:
+    model: openai/gpt-oss-120b     # Apache-2.0 open weights, served fast; reasoning on a separate channel
+    fallback_model: openai/gpt-oss-20b
+  ollama:
+    model: qwen2.5:3b-instruct
+    host: http://localhost:11434
+  local_hf:
+    model: Qwen/Qwen2.5-1.5B-Instruct
+
+sentiment:
+  enabled: true
+  model: distilbert-base-uncased-finetuned-sst-2-english
+  max_samples: 24          # reviews scored per query; aggregate is stable well before this
+
+# Each branch is a separate corpus with its own retrieval profile. The settings
+# differ because the three text distributions differ; see docs/design-decisions.md.
+branches:
+  reviews:
+    label: Customer Reviews
+    source: amazon_polarity
+    description: >
+      First-person customer opinions about consumer products: satisfaction and
+      complaints, build quality, battery life, value for money, durability,
+      usability, returns and after-sales experience, recommendations.
+    keywords: [review, customer, user, complaint, satisfaction, sentiment, opinion,
+               feedback, rating, buyer, buyers, quality, defect, refund, warranty,
+               experience, praise, dislike, recommend, usability, comfort, reliability,
+               durability, performance, battery, setup, packaging, shipping]
+    documents: 2000
+    chunk_size: 320        # reviews are short; one chunk usually holds a whole review
+    chunk_overlap: 40
+    top_k: 6
+    dense_weight: 0.7      # paraphrase-heavy, informal text favours dense retrieval
+    sparse_weight: 0.3
+
+  news:
+    label: Market News
+    source: ag_news
+    description: >
+      Business and technology news reporting: product launches, company
+      announcements, market share shifts, partnerships, acquisitions, regulation,
+      industry trends, competitor moves and sector growth.
+    keywords: [market, industry, trend, launch, competitor, competitors, announcement,
+               growth, sector, partnership, acquisition, regulation, demand, adoption,
+               expansion, strategy, rival, rivals, share, technology, deal, pricing,
+               consumer, product]
+    documents: 2000
+    chunk_size: 480
+    chunk_overlap: 60
+    top_k: 6
+    dense_weight: 0.6
+    sparse_weight: 0.4
+
+  financials:
+    label: Financial Reporting
+    source: financial_news
+    description: >
+      Financial and investor-facing reporting: revenue, profit and loss, margins,
+      earnings, guidance, forecasts, valuation, stakes and shareholdings,
+      analyst ratings, capital raises and financial results of named companies.
+    keywords: [revenue, profit, profitability, loss, margin, margins, earnings, quarter,
+               guidance, forecast, valuation, stake, shareholder, analyst, dividend,
+               debt, capital, investor, investment, eps, outlook, stock, funding,
+               billion, million, financial, financials, risk, cost, costs, cash]
+    documents: 2000
+    chunk_size: 640        # long Reuters articles; larger window preserves context
+    chunk_overlap: 80
+    top_k: 5
+    dense_weight: 0.5      # tickers, company names and figures need lexical matching
+    sparse_weight: 0.5
