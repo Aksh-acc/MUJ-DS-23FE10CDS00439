@@ -1,0 +1,35 @@
+{"id": "r01", "query": "What do customers complain about in wireless chargers?", "branches": ["reviews"], "kind": "single"}
+{"id": "r02", "query": "Are buyers satisfied with battery life on these devices?", "branches": ["reviews"], "kind": "single"}
+{"id": "r03", "query": "How do users describe build quality and durability?", "branches": ["reviews"], "kind": "single"}
+{"id": "r04", "query": "What problems do people report during setup and installation?", "branches": ["reviews"], "kind": "single"}
+{"id": "r05", "query": "Do customers think these products are worth the price they paid?", "branches": ["reviews"], "kind": "single"}
+{"id": "r06", "query": "What packaging and shipping issues appear in customer feedback?", "branches": ["reviews"], "kind": "single"}
+{"id": "r07", "query": "Which product defects come up repeatedly in user reviews?", "branches": ["reviews"], "kind": "single"}
+{"id": "r08", "query": "customer satisfaction", "branches": ["reviews"], "kind": "single"}
+{"id": "r09", "query": "What do owners say about reliability after a few months of use?", "branches": ["reviews"], "kind": "single"}
+{"id": "n01", "query": "Which competitors announced new products recently?", "branches": ["news"], "kind": "single"}
+{"id": "n02", "query": "What partnerships and acquisitions were reported in the technology sector?", "branches": ["news"], "kind": "single"}
+{"id": "n03", "query": "What regulatory developments are affecting the industry?", "branches": ["news"], "kind": "single"}
+{"id": "n04", "query": "How is market adoption of new technology trending?", "branches": ["news"], "kind": "single"}
+{"id": "n05", "query": "What expansion strategies have companies announced?", "branches": ["news"], "kind": "single"}
+{"id": "n06", "query": "competitor product launch", "branches": ["news"], "kind": "single"}
+{"id": "n07", "query": "Which rivals are gaining market share in consumer technology?", "branches": ["news"], "kind": "single"}
+{"id": "f01", "query": "What were the reported quarterly revenue and profit figures?", "branches": ["financials"], "kind": "single"}
+{"id": "f02", "query": "What is the guidance and forecast for earnings?", "branches": ["financials"], "kind": "single"}
+{"id": "f03", "query": "What do analysts rate the stock and why?", "branches": ["financials"], "kind": "single"}
+{"id": "f04", "query": "Which investors took stakes or increased their shareholdings?", "branches": ["financials"], "kind": "single"}
+{"id": "f05", "query": "How have operating margins moved over the period?", "branches": ["financials"], "kind": "single"}
+{"id": "f06", "query": "What debt and capital raising activity was reported?", "branches": ["financials"], "kind": "single"}
+{"id": "f07", "query": "What is the EPS and dividend outlook?", "branches": ["financials"], "kind": "single"}
+{"id": "f08", "query": "margin", "branches": ["financials"], "kind": "single"}
+{"id": "f09", "query": "How much cash did the company generate and what were its costs?", "branches": ["financials"], "kind": "single"}
+{"id": "m01", "query": "Is there consumer demand for budget devices, and what are rivals launching?", "branches": ["reviews", "news"], "kind": "multi"}
+{"id": "m02", "query": "How does customer sentiment compare with reported market trends?", "branches": ["reviews", "news"], "kind": "multi"}
+{"id": "m03", "query": "What is the revenue and profit outlook for the sector?", "branches": ["financials", "news"], "kind": "multi"}
+{"id": "m04", "query": "Which acquisitions were announced and what did they cost?", "branches": ["news", "financials"], "kind": "multi"}
+{"id": "m05", "query": "How are semiconductor and storage revenues trending in the market?", "branches": ["financials", "news"], "kind": "multi"}
+{"id": "m06", "query": "Do product quality complaints line up with reported margin pressure?", "branches": ["reviews", "financials"], "kind": "multi"}
+{"id": "m07", "query": "Should we launch a budget tablet? Consider demand, rivals and financial risk.", "branches": ["news", "financials"], "kind": "multi"}
+{"id": "m08", "query": "Give a full market assessment: customer feedback, competitor moves and financial performance.", "branches": ["reviews", "news", "financials"], "kind": "multi"}
+{"id": "m09", "query": "What do buyers say, what is the press reporting, and what do the numbers show?", "branches": ["reviews", "news", "financials"], "kind": "multi"}
+{"id": "m10", "query": "Assess this product category on user satisfaction, industry momentum and earnings impact.", "branches": ["reviews", "news", "financials"], "kind": "multi"}
